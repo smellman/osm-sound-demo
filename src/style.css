@@ -1,0 +1,30 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 100vh;
+  width: 100vw;
+}
+
+#button {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  z-index: 100;
+  width: 80px;
+  height: 40px;
+  font-size: large;
+}
+.btn--orange {
+  color: #fff;
+  background-color: #eb6100;
+}
+.btm--orange:hover {
+  color: #fff;
+  background: #f56500;
+}
+.btn--radius {
+  border-radius: 100vh;
+}
