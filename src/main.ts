@@ -7,7 +7,7 @@ const map = new Map({
   container: 'map',
   //style: 'https://tile.openstreetmap.jp/styles/osm-bright/style.json',
   style: 'https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json',
-  center: [136.8816, 35.1704],
+  center: [141.35079, 43.06868],
   zoom: 16,
   pitch: 55,
 })
