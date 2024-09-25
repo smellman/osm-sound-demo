@@ -7,7 +7,8 @@ const map = new Map({
   container: 'map',
   //style: 'https://tile.openstreetmap.jp/styles/osm-bright/style.json',
   style: 'https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json',
-  center: [141.35079, 43.06868],
+  //center: [141.35079, 43.06868], // Sapporo
+  center: [132.455486, 34.394377], // 広島県民文化センター
   zoom: 16,
   pitch: 55,
 })
