@@ -54,8 +54,9 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     //style: 'https://tile.openstreetmap.jp/styles/osm-bright/style.json',
     //style: 'https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json',
     style: style,
+    center: [139.767165, 35.680655], // Tokyo
     //center: [141.35079, 43.06868], // Sapporo
-    center: [132.455486, 34.394377], // 広島県民文化センター
+    //center: [132.455486, 34.394377], // 広島県民文化センター
     zoom: 16,
     pitch: 70,
     maxPitch: 85,
