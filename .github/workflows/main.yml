@@ -2,31 +2,21 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ['main']
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow one concurrent deployment
-concurrency:
-  group: 'pages'
-  cancel-in-progress: true
-
+    branches:
+      - main
+      
 jobs:
   # Single deploy job since we're just deploying
-  deploy:
+  build:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,19 +25,35 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-      - name: Install dependencies
-        run: npm ci
+      - name: Restore npm cache
+        id: restore-cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: js-depend-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+      - name: npm install
+        if: steps.restore-cache.outputs.cache-hit != 'true'
+        run: npm install
       - name: Build
         run: npm run build
       - name: Setup Pages
         uses: actions/configure-pages@v4
-      - name: Upload artifact
+      - run: touch dist/.nojekyll
+      - name: Deploy
+        id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload dist folder
           path: './dist'
+  deploy:
+    runs-on: ubuntu-24.04
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
