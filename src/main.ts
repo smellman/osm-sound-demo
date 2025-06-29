@@ -8,15 +8,18 @@ const music = [
   {
     name: "Ca5 / Memory of the Cartridge",
     url: memoryofthecartridge,
+    link: "https://www.otherman-records.com/releases/OTMN051",
   },
   {
     name: "storz / Glitter (Original Mix)",
     url: glitter_original_mix,
+    link: "https://www.otherman-records.com/releases/OTMN040",
   },
 ]
 
 let currentUrl = music[0].url
 let currentTItle = music[0].name
+let currentLink = music[0].link
 
 const styleUrl = "https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json"
 const terrainUrl = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
@@ -192,11 +195,13 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   const btn = document.getElementById('button') as HTMLButtonElement
   const soundStatus = document.getElementById('sound-status') as HTMLDivElement
   const title = document.getElementById('current-track') as HTMLSpanElement
+  const link = document.getElementById('current-link') as HTMLAnchorElement
   if (btn) {
     btn.addEventListener('click', () => {
       if (!playing) {
         soundStatus.style.display = 'block'
         title.textContent = currentTItle
+        link.href = currentLink
         if (!loaded) {
           loadSound(currentUrl)
         } else {
@@ -230,6 +235,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       const nextIndex = (currentIndex + 1) % music.length
       currentUrl = music[nextIndex].url
       currentTItle = music[nextIndex].name
+      currentLink = music[nextIndex].link
       if (playing) {
         if (loaded) {
           !bufferSource || bufferSource.stop()
@@ -240,6 +246,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
         loadSound(currentUrl)
       }
       title.textContent = currentTItle
+      link.href = currentLink
     })
   }
 
