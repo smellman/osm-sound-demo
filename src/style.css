@@ -37,9 +37,12 @@ html, body {
   font-size: large;
   color: #333;
   background-color: #f0f0f0;
-  padding: 5x;
   border-radius: 5px;
   display: none;
+}
+
+#sound-status p {
+  margin: 10px;
 }
 
 #flyTo {
