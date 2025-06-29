@@ -220,7 +220,8 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
         curve: 1.42,
         easing(t) {
           return t
-        }
+        },
+        essential: true // this animation is considered essential with respect to prefers-reduced-motion
       })
       flyTo = true
       map.once('moveend', () => {
