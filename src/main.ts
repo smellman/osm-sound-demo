@@ -3,6 +3,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { Map } from 'maplibre-gl'
 import memoryofthecartridge from '/3_memory-of-the-cartridge.mp3'
 import glitter_original_mix from '/5_glitter_original_mix.mp3'
+import munster_jig_2016_re_jig from '/1-munster-jig-2016-re-jig.mp3'
 
 const music = [
   {
@@ -14,6 +15,11 @@ const music = [
     name: "storz / Glitter (Original Mix)",
     url: glitter_original_mix,
     link: "https://www.otherman-records.com/releases/OTMN040",
+  },
+  {
+    name: "E-coli / Munster Jig (2016 Re-Jig)",
+    url: munster_jig_2016_re_jig,
+    link: "https://www.otherman-records.com/releases/OTMN071",
   },
 ]
 
