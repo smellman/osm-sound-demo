@@ -169,10 +169,12 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     requestId = requestAnimationFrame(draw)
   }
 
-  const btn = document.getElementById('button')
+  const btn = document.getElementById('button') as HTMLButtonElement
+  const soundStatus = document.getElementById('sound-status') as HTMLDivElement
   if (btn) {
     btn.addEventListener('click', () => {
       if (!playing) {
+        soundStatus.style.display = 'block'
         if (!loaded) {
           loadSound(memoryofthecartridge)
         } else {
@@ -184,6 +186,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
         requestId = requestAnimationFrame(draw)
         btn.textContent = 'Stop'
       } else {
+        soundStatus.style.display = 'none'
         if (loaded) {
           !bufferSource || bufferSource.stop()
           bufferSource = null

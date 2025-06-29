@@ -28,3 +28,16 @@ html, body {
 .btn--radius {
   border-radius: 100vh;
 }
+
+#sound-status {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  z-index: 100;
+  font-size: large;
+  color: #333;
+  background-color: #f0f0f0;
+  padding: 5x;
+  border-radius: 5px;
+  display: none;
+}
