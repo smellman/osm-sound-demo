@@ -17,6 +17,17 @@ html, body {
   height: 40px;
   font-size: large;
 }
+
+#next {
+  position: absolute;
+  bottom: 5px;
+  left: 100px;
+  z-index: 100;
+  width: 80px;
+  height: 40px;
+  font-size: large;
+}
+
 .btn--orange {
   color: #fff;
   background-color: #eb6100;

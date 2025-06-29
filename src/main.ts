@@ -2,6 +2,21 @@ import './style.css'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { Map } from 'maplibre-gl'
 import memoryofthecartridge from '/3_memory-of-the-cartridge.mp3'
+import glitter_original_mix from '/5_glitter_original_mix.mp3'
+
+const music = [
+  {
+    name: "Ca5 / Memory of the Cartridge",
+    url: memoryofthecartridge,
+  },
+  {
+    name: "storz / Glitter (Original Mix)",
+    url: glitter_original_mix,
+  },
+]
+
+let currentUrl = music[0].url
+let currentTItle = music[0].name
 
 const styleUrl = "https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json"
 const terrainUrl = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
@@ -176,12 +191,14 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
 
   const btn = document.getElementById('button') as HTMLButtonElement
   const soundStatus = document.getElementById('sound-status') as HTMLDivElement
+  const title = document.getElementById('current-track') as HTMLSpanElement
   if (btn) {
     btn.addEventListener('click', () => {
       if (!playing) {
         soundStatus.style.display = 'block'
+        title.textContent = currentTItle
         if (!loaded) {
-          loadSound(memoryofthecartridge)
+          loadSound(currentUrl)
         } else {
           playSilence()
           if (musicBuffer) {
@@ -204,6 +221,26 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       }
       playing = !playing
     }, false);
+  }
+
+  const nextButton = document.getElementById('next') as HTMLButtonElement
+  if (nextButton) {
+    nextButton.addEventListener('click', () => {
+      const currentIndex = music.findIndex(m => m.url === currentUrl)
+      const nextIndex = (currentIndex + 1) % music.length
+      currentUrl = music[nextIndex].url
+      currentTItle = music[nextIndex].name
+      if (playing) {
+        if (loaded) {
+          !bufferSource || bufferSource.stop()
+          bufferSource = null
+        }
+        loaded = false
+        playSilence()
+        loadSound(currentUrl)
+      }
+      title.textContent = currentTItle
+    })
   }
 
   const flyToButtons = document.querySelectorAll('#flyTo button')
