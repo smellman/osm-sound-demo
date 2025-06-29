@@ -41,3 +41,47 @@ html, body {
   border-radius: 5px;
   display: none;
 }
+
+#flyTo {
+  position: absolute;
+  top: 5px;
+  right: 120px;
+  z-index: 100;
+  display: none;
+}
+
+#flyTo ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#flyTo button {
+  display: block;
+  width: 100px;
+  height: 40px;
+  margin-bottom: 5px;
+  font-size: large;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 10px;
+}
+
+#flyTo button:hover {
+  background-color: #0056b3;
+}
+
+#flyToToggle {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 100;
+  width: 80px;
+  height: 40px;
+  font-size: large;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 10px;
+}

@@ -73,6 +73,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   let bufferSource: AudioBufferSourceNode | null = null
   let loaded = false
   let playing = false
+  let flyTo = false
 
   const playSilence = () => {
     const buf = context.createBuffer(1, 1, 22050)
@@ -141,6 +142,10 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   let requestId: number | null = null
 
   const draw = (now: DOMHighResTimeStamp) => {
+    if (flyTo) {
+      requestId = requestAnimationFrame(draw)
+      return
+    }
     if (!dataArray) {
       return
     }
@@ -199,5 +204,40 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       }
       playing = !playing
     }, false);
+  }
+
+  const flyToButtons = document.querySelectorAll('#flyTo button')
+  flyToButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const longitude = parseFloat(button.getAttribute('data-longitude') || '0')
+      const latitude = parseFloat(button.getAttribute('data-latitude') || '0')
+      map.flyTo({
+        center: [longitude, latitude],
+        zoom: 16,
+        pitch: 70,
+        bearing: 0,
+        speed: 1.2,
+        curve: 1.42,
+        easing(t) {
+          return t
+        }
+      })
+      flyTo = true
+      map.once('moveend', () => {
+        flyTo = false
+      })
+    })
+  })
+  let showFlyTo = false
+  const flyToToggle = document.getElementById('flyToToggle') as HTMLButtonElement
+  if (flyToToggle) {
+    flyToToggle.addEventListener('click', () => {
+      if (showFlyTo) {
+        document.getElementById('flyTo')!.style.display = 'none'
+      } else {
+        document.getElementById('flyTo')!.style.display = 'block'
+      }
+      showFlyTo = !showFlyTo
+    })
   }
 })
