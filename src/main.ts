@@ -13,6 +13,7 @@ import glitter_original_mix from '/5_glitter_original_mix.mp3'
 import munster_jig_2016_re_jig from '/1-munster-jig-2016-re-jig.mp3'
 
 const linkBase = "https://www.otherman-records.com/releases/"
+const proxyURL = "https://proxy.smellman.org/proxy/"
 
 let currentRelease: Release | null = null
 let currentTrack: Track | null = null
@@ -38,6 +39,7 @@ const music = [
 let currentUrl = music[0].url
 let currentTitle = music[0].name
 let currentLink = music[0].link
+let currentMD5 = ""
 
 const styleUrl = "https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json"
 const terrainUrl = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
@@ -167,6 +169,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
         if (currentRelease == null || currentRelease.id !== release.id) {
           currentRelease = release;
           currentTrack = release.tracklist[0] || null;
+          stopTrack(); // Stop any currently playing track
         }
         // You can update the UI with the release information here
       } else {
@@ -272,11 +275,20 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     }, false);
   }
 
+  const setupProxyUrl = (url: string) => {
+    const urlObj = url.split("//")
+    if (urlObj.length > 1) {
+      return proxyURL + encodeURIComponent(urlObj[1])
+    }
+    return url
+  }
+
   const playTrack = () => {
     if (currentTrack) {
-      currentUrl = currentTrack.url.replace("http://", "https://")
+      currentUrl = setupProxyUrl(currentTrack.url) //currentTrack.url.replace("http://", "https://")
       currentTitle = currentTrack.title
       currentLink = linkBase + currentRelease!.id
+      currentMD5 = currentTrack.md5 || ""
       soundStatus.style.display = 'block'
       title.textContent = currentTitle
       link.href = currentLink
@@ -318,9 +330,9 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
 
   const playNext = () => {
     if (currentRelease) {
-      const currentIndex = currentRelease.tracklist.findIndex(t => t.url === currentUrl)
-      const nextIndex = (currentIndex + 1) % currentRelease.tracklist.length
-      const nextTrack = currentRelease.tracklist[nextIndex]
+      const currentIndex = currentRelease.tracklist.findIndex(t => t.md5 === currentMD5)
+      const nextIndex = currentIndex + 1
+      const nextTrack = currentRelease.tracklist[nextIndex > currentRelease.tracklist.length - 1 ? 0 : nextIndex]
       currentTrack = nextTrack
       if (playing) {
         stopTrack()
@@ -331,7 +343,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
 
   const playPrevious = () => {
     if (currentRelease) {
-      const currentIndex = currentRelease.tracklist.findIndex(t => t.url === currentUrl)
+      const currentIndex = currentRelease.tracklist.findIndex(t => t.md5 === currentMD5)
       const previousIndex = currentIndex - 1
       const previousTrack = currentRelease.tracklist[previousIndex < 0 ? currentRelease.tracklist.length - 1 : previousIndex]
       currentTrack = previousTrack
