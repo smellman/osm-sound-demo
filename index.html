@@ -7,21 +7,45 @@
     <title>OSM Sound Demo</title>
   </head>
   <body>
-    <div id="map"></div>
-    <button id="button" class="btn btn--orange btn--radius">Play</button>
-    <button id="next" class="btn btn--orange btn--radius">Next</button>
-    <div id="sound-status">
-      <p>♫ <span id="current-track"></span> / <a id="current-link" target="_blank">Link</a></p>
-    </div>
-    <button id="flyToToggle" class="btn btn--orange btn--radius">Fly To</button>
-    <div id="flyTo">
-      <ul>
-        <li><button id="tokyo" data-longitude="139.767165" data-latitude="35.680655" >Tokyo</button></li>
-        <li><button id="sapporo" data-longitude="141.35079" data-latitude="43.06868">Sapporo</button></li>
-        <li><button id="hiroshima" data-longitude="132.455486" data-latitude="34.394377">Hiroshima</button></li>
-        <li><button id="Firenze" data-longitude="11.248662" data-latitude="43.777424">Firenze</button></li>
-        <li><button id="Prishtina" data-longitude="21.163569" data-latitude="42.663895">Prishtina</button></li>
-      </ul>
+    <div class="container-fluid px-0" data-bs-theme="dark">
+      <div id="map"></div>
+      <button id="flyToToggle" class="btn">Fly To</button>
+      <div id="flyTo">
+        <ul>
+          <li><button id="tokyo" data-longitude="139.767165" data-latitude="35.680655" >Tokyo</button></li>
+          <li><button id="sapporo" data-longitude="141.35079" data-latitude="43.06868">Sapporo</button></li>
+          <li><button id="hiroshima" data-longitude="132.455486" data-latitude="34.394377">Hiroshima</button></li>
+          <li><button id="Firenze" data-longitude="11.248662" data-latitude="43.777424">Firenze</button></li>
+          <li><button id="Prishtina" data-longitude="21.163569" data-latitude="42.663895">Prishtina</button></li>
+        </ul>
+      </div>
+      <nav class="navbar fixed-bottom navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <button id="prev-button" class="btn btn-outline-secondary">
+            <i class="bi bi-skip-start-fill"></i>
+          </button>
+          <button id="play-button" class="btn btn-outline-secondary">
+            <i class="bi bi-play-fill"></i>
+          </button>
+          <button id="next-button" class="btn btn-outline-secondary">
+            <i class="bi bi-skip-end-fill"></i>
+          </button>
+          <div id="sound-status">
+            <p>♫ <span id="current-track"></span> / <a id="current-link" target="_blank">Link</a></p>
+          </div>
+
+          <div class="d-flex">
+            <div id="release-list">
+              <select id="release-select" class="form-select">
+                <option value="">Select a release</option>
+              </select>
+            </div>
+            <span class="navbar-text ">
+              <a href="https://www.otherman-records.com/" target="_blank">Music by Otherman Records</a>
+            </span>
+          </div>
+        </div>
+      </nav>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

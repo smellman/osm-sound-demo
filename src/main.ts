@@ -1,9 +1,21 @@
-import './style.css'
+import './style.scss'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { Map } from 'maplibre-gl'
+import {
+  ListItem,
+  Release,
+  Track,
+  fetchAllReleases,
+  fetchReleaseById,
+} from './otherman-records'
 import memoryofthecartridge from '/3_memory-of-the-cartridge.mp3'
 import glitter_original_mix from '/5_glitter_original_mix.mp3'
 import munster_jig_2016_re_jig from '/1-munster-jig-2016-re-jig.mp3'
+
+const linkBase = "https://www.otherman-records.com/releases/"
+
+let currentRelease: Release | null = null
+let currentTrack: Track | null = null
 
 const music = [
   {
@@ -24,7 +36,7 @@ const music = [
 ]
 
 let currentUrl = music[0].url
-let currentTItle = music[0].name
+let currentTitle = music[0].name
 let currentLink = music[0].link
 
 const styleUrl = "https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json"
@@ -116,28 +128,74 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     bufferSource.start(context.currentTime + 0.100)
   }
 
+  let audio: HTMLAudioElement | null = null
+
   const loadSound = (url: string) => {
     // play silent
     playSilence()
 
-    const request = new XMLHttpRequest()
-    request.open('GET', url, true)
-    request.responseType = 'arraybuffer'
-
-    request.onload = () => {
-      context.decodeAudioData(request.response, (buffer) => {
-        loaded = true
-        musicBuffer = buffer
-        if (playing) {
-          play(musicBuffer)
-        }
-      })
-    }
-    request.send()
+    // Streaming audio
+    audio = new Audio(url)
+    audio.crossOrigin = 'anonymous'
+    const source = context.createMediaElementSource(audio);
+    source.connect(analyser);
+    source.connect(context.destination);
+    audio.play().then(() => {
+      loaded = true;
+      musicBuffer = context.createBuffer(1, 1, 22050); // Dummy buffer to avoid null checks later
+      if (playing) {
+        play(musicBuffer);
+      }
+    }).catch(error => {
+      console.error('Error playing audio:', error);
+    });
+    audio.addEventListener('ended', () => {
+      console.log('Audio ended, playing next track');
+      playNext();
+    }, false);
   }
   let dataArray: Uint8Array | null = null
 
+  const changeRelease = (id: string) => {
+    console.log('Changing release to:', id);
+    if (currentRelease !== null && currentRelease.id === id) {
+      return; // No change if the same release is selected
+    }
+    fetchReleaseById(id).then(release => {
+      if (release) {
+        console.log('Fetched release:', release);
+        if (currentRelease == null || currentRelease.id !== release.id) {
+          currentRelease = release;
+          currentTrack = release.tracklist[0] || null;
+        }
+        // You can update the UI with the release information here
+      } else {
+        console.error('Release not found:', id);
+      }
+    }).catch(error => {
+      console.error('Error fetching release:', error);
+    });
+  }
+
+  const releaseList = document.getElementById('release-list') as HTMLDivElement;
+  const select = releaseList.querySelector('select') as HTMLSelectElement;
+  select.addEventListener('change', (event) => {
+    const selectedId = (event.target as HTMLSelectElement).value;
+    if (selectedId) {
+      changeRelease(selectedId);
+    }
+  });
   map.on('load', () => {
+    // fetch Otherman Records releases
+    fetchAllReleases().then(releases => {
+      releases.forEach((release: ListItem) => {
+        const option = document.createElement('option');
+        option.value = release.id;
+        option.textContent = `[${release.id}] ${release.title}`;
+        select.appendChild(option);
+      });
+    });
+
     const maxHeight = 200
     const binWidth = maxHeight / bins
     
@@ -198,61 +256,105 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     requestId = requestAnimationFrame(draw)
   }
 
-  const btn = document.getElementById('button') as HTMLButtonElement
+
+  const playButton = document.getElementById('play-button') as HTMLButtonElement
   const soundStatus = document.getElementById('sound-status') as HTMLDivElement
   const title = document.getElementById('current-track') as HTMLSpanElement
   const link = document.getElementById('current-link') as HTMLAnchorElement
-  if (btn) {
-    btn.addEventListener('click', () => {
+  if (playButton) {
+    playButton.addEventListener('click', () => {
+      console.log('Play button clicked, playing:', playing);
       if (!playing) {
-        soundStatus.style.display = 'block'
-        title.textContent = currentTItle
-        link.href = currentLink
-        if (!loaded) {
-          loadSound(currentUrl)
-        } else {
-          playSilence()
-          if (musicBuffer) {
-            play(musicBuffer)
-          }
-        }
-        requestId = requestAnimationFrame(draw)
-        btn.textContent = 'Stop'
+        playTrack()
       } else {
-        soundStatus.style.display = 'none'
-        if (loaded) {
-          !bufferSource || bufferSource.stop()
-          bufferSource = null
-        }
-        if (requestId) {
-          cancelAnimationFrame(requestId)
-          requestId = null
-        }
-        btn.textContent = 'Play'
+        stopTrack()
       }
-      playing = !playing
     }, false);
   }
 
-  const nextButton = document.getElementById('next') as HTMLButtonElement
+  const playTrack = () => {
+    if (currentTrack) {
+      currentUrl = currentTrack.url.replace("http://", "https://")
+      currentTitle = currentTrack.title
+      currentLink = linkBase + currentRelease!.id
+      soundStatus.style.display = 'block'
+      title.textContent = currentTitle
+      link.href = currentLink
+      if (!loaded) {
+        loadSound(currentUrl)
+      } else {
+        playSilence()
+        if (musicBuffer) {
+          play(musicBuffer)
+        }
+      }
+      requestId = requestAnimationFrame(draw)
+      playButton.innerHTML = '<i class="bi bi-stop-fill"></i>'
+      playing = true
+    } else {
+      console.log('Play button clicked, stopping:', currentTrack);
+    }
+  }
+
+  const stopTrack = () => {
+    soundStatus.style.display = 'none'
+    if (loaded) {
+      !bufferSource || bufferSource.stop()
+      bufferSource = null
+      loaded = false
+    }
+    if (audio) {
+      audio.pause()
+      audio.currentTime = 0
+      audio = null
+    }
+    if (requestId) {
+      cancelAnimationFrame(requestId)
+      requestId = null
+    }
+    playButton.innerHTML = '<i class="bi bi-play-fill"></i>'
+    playing = false
+  }
+
+  const playNext = () => {
+    if (currentRelease) {
+      const currentIndex = currentRelease.tracklist.findIndex(t => t.url === currentUrl)
+      const nextIndex = (currentIndex + 1) % currentRelease.tracklist.length
+      const nextTrack = currentRelease.tracklist[nextIndex]
+      currentTrack = nextTrack
+      if (playing) {
+        stopTrack()
+        playTrack()
+      }
+    }
+  }
+
+  const playPrevious = () => {
+    if (currentRelease) {
+      const currentIndex = currentRelease.tracklist.findIndex(t => t.url === currentUrl)
+      const previousIndex = currentIndex - 1
+      const previousTrack = currentRelease.tracklist[previousIndex < 0 ? currentRelease.tracklist.length - 1 : previousIndex]
+      currentTrack = previousTrack
+      if (playing) {
+        stopTrack()
+        playTrack()
+      }
+    }
+  }
+
+  const nextButton = document.getElementById('next-button') as HTMLButtonElement
   if (nextButton) {
     nextButton.addEventListener('click', () => {
-      const currentIndex = music.findIndex(m => m.url === currentUrl)
-      const nextIndex = (currentIndex + 1) % music.length
-      currentUrl = music[nextIndex].url
-      currentTItle = music[nextIndex].name
-      currentLink = music[nextIndex].link
-      if (playing) {
-        if (loaded) {
-          !bufferSource || bufferSource.stop()
-          bufferSource = null
-        }
-        loaded = false
-        playSilence()
-        loadSound(currentUrl)
-      }
-      title.textContent = currentTItle
-      link.href = currentLink
+      console.log('Next button clicked');
+      playNext()
+    })
+  }
+
+  const previousButton = document.getElementById('prev-button') as HTMLButtonElement
+  if (previousButton) {
+    previousButton.addEventListener('click', () => {
+      console.log('Previous button clicked');
+      playPrevious()
     })
   }
 

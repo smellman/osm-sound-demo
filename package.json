@@ -9,9 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.7",
+    "bootstrap-icons": "^1.13.1",
     "maplibre-gl": "5.6.0"
   },
   "devDependencies": {
+    "sass": "^1.89.2",
     "typescript": "^5.8.3",
     "vite": "^7.0.0"
   }

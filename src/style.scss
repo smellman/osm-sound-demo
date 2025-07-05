@@ -1,55 +1,16 @@
+@import "bootstrap/scss/bootstrap";
+$bootstrap-icons-font-dir: "bootstrap-icons/font/fonts";
+@import "bootstrap-icons/font/bootstrap-icons.scss";
+
 html, body {
   margin: 0;
   padding: 0;
 }
 
 #map {
-  height: 100vh;
+  height: calc(100vh - 56px);
   width: 100vw;
-}
-
-#button {
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
-  z-index: 100;
-  width: 80px;
-  height: 40px;
-  font-size: large;
-}
-
-#next {
-  position: absolute;
-  bottom: 5px;
-  left: 100px;
-  z-index: 100;
-  width: 80px;
-  height: 40px;
-  font-size: large;
-}
-
-.btn--orange {
-  color: #fff;
-  background-color: #eb6100;
-}
-.btm--orange:hover {
-  color: #fff;
-  background: #f56500;
-}
-.btn--radius {
-  border-radius: 100vh;
-}
-
-#sound-status {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  z-index: 100;
-  font-size: large;
-  color: #333;
-  background-color: #f0f0f0;
-  border-radius: 5px;
-  display: none;
+  margin: 0;
 }
 
 #sound-status p {
