@@ -9,6 +9,7 @@
   <body>
     <div class="container-fluid px-0" data-bs-theme="dark">
       <div id="map"></div>
+      <button id="aboutToggle" class="btn">About</button>
       <button id="flyToToggle" class="btn">Fly To</button>
       <div id="flyTo">
         <ul>
@@ -21,25 +22,29 @@
       </div>
       <nav class="navbar fixed-bottom navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-          <button id="prev-button" class="btn btn-outline-secondary">
-            <i class="bi bi-skip-start-fill"></i>
-          </button>
-          <button id="play-button" class="btn btn-outline-secondary">
-            <i class="bi bi-play-fill"></i>
-          </button>
-          <button id="next-button" class="btn btn-outline-secondary">
-            <i class="bi bi-skip-end-fill"></i>
-          </button>
-          <div id="sound-status">
-            <p>♫ <span id="current-track"></span> / <a id="current-link" target="_blank">Link</a></p>
+          <div class="d-flex">
+            <button id="prev-button" class="btn btn-outline-secondary">
+              <i class="bi bi-skip-start-fill"></i>
+            </button>
+            <button id="play-button" class="btn btn-outline-secondary">
+              <i class="bi bi-play-fill"></i>
+            </button>
+            <button id="next-button" class="btn btn-outline-secondary">
+              <i class="bi bi-skip-end-fill"></i>
+            </button>
           </div>
-
+          <div class="d-flex">
+            <div id="sound-status" class="bg-dark text-light marquee-container">
+              <p class="marquee-text">♫ <span id="current-track"></span></p>
+            </div>
+          </div>
           <div class="d-flex">
             <div id="release-list">
               <select id="release-select" class="form-select">
                 <option value="">Select a release</option>
               </select>
             </div>
+            <a id="current-link" target="_blank" class="btn">Go To Release</a>
             <span class="navbar-text ">
               <a href="https://www.otherman-records.com/" target="_blank">Music by Otherman Records</a>
             </span>

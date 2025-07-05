@@ -8,37 +8,15 @@ import {
   fetchAllReleases,
   fetchReleaseById,
 } from './otherman-records'
-import memoryofthecartridge from '/3_memory-of-the-cartridge.mp3'
-import glitter_original_mix from '/5_glitter_original_mix.mp3'
-import munster_jig_2016_re_jig from '/1-munster-jig-2016-re-jig.mp3'
 
 const linkBase = "https://www.otherman-records.com/releases/"
 const proxyURL = "https://proxy.smellman.org/proxy/"
 
 let currentRelease: Release | null = null
 let currentTrack: Track | null = null
-
-const music = [
-  {
-    name: "Ca5 / Memory of the Cartridge",
-    url: memoryofthecartridge,
-    link: "https://www.otherman-records.com/releases/OTMN051",
-  },
-  {
-    name: "storz / Glitter (Original Mix)",
-    url: glitter_original_mix,
-    link: "https://www.otherman-records.com/releases/OTMN040",
-  },
-  {
-    name: "E-coli / Munster Jig (2016 Re-Jig)",
-    url: munster_jig_2016_re_jig,
-    link: "https://www.otherman-records.com/releases/OTMN071",
-  },
-]
-
-let currentUrl = music[0].url
-let currentTitle = music[0].name
-let currentLink = music[0].link
+let currentUrl = ""
+let currentTitle = ""
+let currentLink = ""
 let currentMD5 = ""
 
 const styleUrl = "https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json"
@@ -286,7 +264,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   const playTrack = () => {
     if (currentTrack) {
       currentUrl = setupProxyUrl(currentTrack.url) //currentTrack.url.replace("http://", "https://")
-      currentTitle = currentTrack.title
+      currentTitle = `${currentTrack.title} / ${currentRelease?.artist1} ${currentRelease?.artist2 ? currentRelease.artist2 : ""}`
       currentLink = linkBase + currentRelease!.id
       currentMD5 = currentTrack.md5 || ""
       soundStatus.style.display = 'block'
