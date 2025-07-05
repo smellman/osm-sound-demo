@@ -8,17 +8,35 @@
   </head>
   <body>
     <div class="container-fluid px-0" data-bs-theme="dark">
-      <div id="map"></div>
-      <button id="aboutToggle" class="btn">About</button>
-      <button id="flyToToggle" class="btn">Fly To</button>
-      <div id="flyTo">
-        <ul>
-          <li><button id="tokyo" data-longitude="139.767165" data-latitude="35.680655" >Tokyo</button></li>
-          <li><button id="sapporo" data-longitude="141.35079" data-latitude="43.06868">Sapporo</button></li>
-          <li><button id="hiroshima" data-longitude="132.455486" data-latitude="34.394377">Hiroshima</button></li>
-          <li><button id="Firenze" data-longitude="11.248662" data-latitude="43.777424">Firenze</button></li>
-          <li><button id="Prishtina" data-longitude="21.163569" data-latitude="42.663895">Prishtina</button></li>
-        </ul>
+      <div id="map-container" class="position-relative">
+        <div id="map"></div>
+        <button id="about" class="btn btn-primary position-absolute top-0 start-0 m-3" data-bs-toggle="modal" data-bs-target="#aboutModal">About</button>
+        <div id="aboutModal" class="modal fade" tabindex="-1" aria-labelledby="aboutModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="aboutModalLabel">About OSM Sound Demo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>This demo showcases the integration of OpenStreetMap with sound playback functionality.</p>
+                <p><a href="https://www.otherman-records.com/" target="_blank">Music by Otherman Records</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="flyTo" class="dropdown position-absolute top-0 end-0 m-3" role="group">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Fly To
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" id="tokyo" data-longitude="139.767165" data-latitude="35.680655">Tokyo</a></li>
+            <li><a class="dropdown-item" id="sapporo" data-longitude="141.35079" data-latitude="43.06868">Sapporo</a></li>
+            <li><a class="dropdown-item" id="hiroshima" data-longitude="132.455486" data-latitude="34.394377">Hiroshima</a></li>
+            <li><a class="dropdown-item" id="Firenze" data-longitude="11.248662" data-latitude="43.777424">Firenze</a></li>
+            <li><a class="dropdown-item" id="Prishtina" data-longitude="21.163569" data-latitude="42.663895">Prishtina</a></li>
+          </ul>
+        </div>
       </div>
       <nav class="navbar fixed-bottom navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -44,10 +62,7 @@
                 <option value="">Select a release</option>
               </select>
             </div>
-            <a id="current-link" target="_blank" class="btn">Go To Release</a>
-            <span class="navbar-text ">
-              <a href="https://www.otherman-records.com/" target="_blank">Music by Otherman Records</a>
-            </span>
+            <a id="current-link" target="_blank" class="btn btn-outline-secondary">Go To Release</a>
           </div>
         </div>
       </nav>

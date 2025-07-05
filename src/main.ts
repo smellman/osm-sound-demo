@@ -8,6 +8,8 @@ import {
   fetchAllReleases,
   fetchReleaseById,
 } from './otherman-records'
+//import * as bootstrap from 'bootstrap'
+import 'bootstrap'
 
 const linkBase = "https://www.otherman-records.com/releases/"
 const proxyURL = "https://proxy.smellman.org/proxy/"
@@ -149,7 +151,6 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
           currentTrack = release.tracklist[0] || null;
           stopTrack(); // Stop any currently playing track
         }
-        // You can update the UI with the release information here
       } else {
         console.error('Release not found:', id);
       }
@@ -348,11 +349,11 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     })
   }
 
-  const flyToButtons = document.querySelectorAll('#flyTo button')
-  flyToButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const longitude = parseFloat(button.getAttribute('data-longitude') || '0')
-      const latitude = parseFloat(button.getAttribute('data-latitude') || '0')
+  const flyToLinks = document.querySelectorAll('#flyTo a')
+  flyToLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const longitude = parseFloat(link.getAttribute('data-longitude') || '0')
+      const latitude = parseFloat(link.getAttribute('data-latitude') || '0')
       map.flyTo({
         center: [longitude, latitude],
         zoom: 16,
@@ -371,16 +372,4 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       })
     })
   })
-  let showFlyTo = false
-  const flyToToggle = document.getElementById('flyToToggle') as HTMLButtonElement
-  if (flyToToggle) {
-    flyToToggle.addEventListener('click', () => {
-      if (showFlyTo) {
-        document.getElementById('flyTo')!.style.display = 'none'
-      } else {
-        document.getElementById('flyTo')!.style.display = 'block'
-      }
-      showFlyTo = !showFlyTo
-    })
-  }
 })
