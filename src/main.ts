@@ -8,7 +8,6 @@ import {
   fetchAllReleases,
   fetchReleaseById,
 } from './otherman-records'
-//import * as bootstrap from 'bootstrap'
 import 'bootstrap'
 
 const linkBase = "https://www.otherman-records.com/releases/"
@@ -69,12 +68,8 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
 
   const map = new Map({
     container: 'map',
-    //style: 'https://tile.openstreetmap.jp/styles/osm-bright/style.json',
-    //style: 'https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json',
     style: style,
     center: [139.767165, 35.680655], // Tokyo
-    //center: [141.35079, 43.06868], // Sapporo
-    //center: [132.455486, 34.394377], // 広島県民文化センター
     zoom: 16,
     pitch: 70,
     maxPitch: 85,
@@ -240,7 +235,6 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
 
 
   const playButton = document.getElementById('play-button') as HTMLButtonElement
-  const soundStatus = document.getElementById('sound-status') as HTMLDivElement
   const title = document.getElementById('current-track') as HTMLSpanElement
   const link = document.getElementById('current-link') as HTMLAnchorElement
   if (playButton) {
@@ -264,7 +258,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
 
   const playTrack = () => {
     if (currentTrack) {
-      currentUrl = setupProxyUrl(currentTrack.url) //currentTrack.url.replace("http://", "https://")
+      currentUrl = setupProxyUrl(currentTrack.url)
       currentTitle = `${currentTrack.title} / ${currentRelease?.artist1} ${currentRelease?.artist2 ? currentRelease.artist2 : ""}`
       currentLink = linkBase + currentRelease!.id
       currentMD5 = currentTrack.md5 || ""
