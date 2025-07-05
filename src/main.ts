@@ -173,7 +173,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       releases.forEach((release: ListItem) => {
         const option = document.createElement('option');
         option.value = release.id;
-        option.textContent = `[${release.id}] ${release.title}`;
+        option.textContent = `[${release.id}] ${release.title} / ${release.artist1} ${release.artist2 ? release.artist2 : ""}`;
         select.appendChild(option);
       });
     });
@@ -268,7 +268,6 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       currentTitle = `${currentTrack.title} / ${currentRelease?.artist1} ${currentRelease?.artist2 ? currentRelease.artist2 : ""}`
       currentLink = linkBase + currentRelease!.id
       currentMD5 = currentTrack.md5 || ""
-      soundStatus.style.display = 'block'
       title.textContent = currentTitle
       link.href = currentLink
       if (!loaded) {
@@ -288,7 +287,6 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   }
 
   const stopTrack = () => {
-    soundStatus.style.display = 'none'
     if (loaded) {
       !bufferSource || bufferSource.stop()
       bufferSource = null
