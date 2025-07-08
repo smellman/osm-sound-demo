@@ -364,4 +364,34 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       })
     })
   })
+  const locateButton = document.getElementById('locate-button') as HTMLButtonElement
+  if (locateButton) {
+    locateButton.addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const { latitude, longitude } = position.coords
+          map.flyTo({
+            center: [longitude, latitude],
+            zoom: 16,
+            pitch: 70,
+            bearing: 0,
+            speed: 1.2,
+            curve: 1.42,
+            easing(t) {
+              return t
+            },
+            essential: true // this animation is considered essential with respect to prefers-reduced-motion
+          })
+          flyTo = true
+          map.once('moveend', () => {
+            flyTo = false
+          })
+        }, (error) => {
+          console.error('Error getting location:', error);
+        });
+      } else {
+        console.error('Geolocation is not supported by this browser.');
+      }
+    })
+  }
 })
