@@ -13,9 +13,7 @@ MIT License
 
 # Demo Music
 
-- [Ca5 - Memory of the Cartridge](https://www.otherman-records.com/releases/OTMN051)
-- [storz - Glitter (Original Mix)](https://www.otherman-records.com/releases/OTMN040)
-- [E-coli / Munster Jig (2016 Re-Jig)](https://www.otherman-records.com/releases/OTMN071)
+All music in this demo is from the [Otherman Records](https://www.otherman-records.com/).
 
 ## License of the music
 
