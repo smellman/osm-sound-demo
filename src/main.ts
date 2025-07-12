@@ -261,12 +261,14 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     if (currentTrack) {
       currentTitle = `${currentTrack.title} / ${currentRelease?.artist1} ${currentRelease?.artist2 ? currentRelease.artist2 : ""}`
       currentLink = linkBase + currentRelease!.id
+      currentMD5 = currentTrack.md5 || ""
       title.textContent = currentTitle
       link.href = currentLink
       link.target = "_blank"
     } else {
       currentTitle = "No track selected, please select a release."
       currentLink = "#"
+      currentMD5 = ""
       title.textContent = currentTitle
       link.href = currentLink
       link.target = ""
@@ -276,7 +278,6 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   const playTrack = () => {
     if (currentTrack) {
       currentUrl = setupProxyUrl(currentTrack.url)
-      currentMD5 = currentTrack.md5 || ""
       if (!loaded) {
         loadSound(currentUrl)
       } else {
