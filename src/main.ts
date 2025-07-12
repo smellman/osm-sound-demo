@@ -400,9 +400,11 @@ const adjustMapForNavbar = () => {
   const map = document.getElementById('map') as HTMLDivElement
   if (navbar && map) {
     const navbarHeight = navbar.offsetHeight
-    map.style.height = `calc(100vh - ${navbarHeight}px)`
+    const viewportHeight = window.innerHeight
+    map.style.height = `${viewportHeight - navbarHeight}px`
   }
 }
 
 window.addEventListener('resize', adjustMapForNavbar)
+window.addEventListener('orientationchange', adjustMapForNavbar)
 document.addEventListener('DOMContentLoaded', adjustMapForNavbar)
