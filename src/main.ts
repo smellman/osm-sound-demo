@@ -393,3 +393,16 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   // Update the title and link
   setupTitleAndLink()
 })
+
+// tweek nav bar height for mobile
+const adjustMapForNavbar = () => {
+  const navbar = document.querySelector('.navbar') as HTMLDivElement
+  const map = document.getElementById('map') as HTMLDivElement
+  if (navbar && map) {
+    const navbarHeight = navbar.offsetHeight
+    map.style.height = `calc(100vh - ${navbarHeight}px)`
+  }
+}
+
+window.addEventListener('resize', adjustMapForNavbar)
+document.addEventListener('DOMContentLoaded', adjustMapForNavbar)
