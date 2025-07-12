@@ -145,6 +145,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
           currentRelease = release;
           currentTrack = release.tracklist[0] || null;
           stopTrack(); // Stop any currently playing track
+          setupTitleAndLink();
         }
       } else {
         console.error('Release not found:', id);
@@ -256,14 +257,26 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     return url
   }
 
+  const setupTitleAndLink = () => {
+    if (currentTrack) {
+      currentTitle = `${currentTrack.title} / ${currentRelease?.artist1} ${currentRelease?.artist2 ? currentRelease.artist2 : ""}`
+      currentLink = linkBase + currentRelease!.id
+      title.textContent = currentTitle
+      link.href = currentLink
+      link.target = "_blank"
+    } else {
+      currentTitle = "No track selected, please select a release."
+      currentLink = "#"
+      title.textContent = currentTitle
+      link.href = currentLink
+      link.target = ""
+    }
+  }
+
   const playTrack = () => {
     if (currentTrack) {
       currentUrl = setupProxyUrl(currentTrack.url)
-      currentTitle = `${currentTrack.title} / ${currentRelease?.artist1} ${currentRelease?.artist2 ? currentRelease.artist2 : ""}`
-      currentLink = linkBase + currentRelease!.id
       currentMD5 = currentTrack.md5 || ""
-      title.textContent = currentTitle
-      link.href = currentLink
       if (!loaded) {
         loadSound(currentUrl)
       } else {
@@ -305,6 +318,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       const nextIndex = currentIndex + 1
       const nextTrack = currentRelease.tracklist[nextIndex > currentRelease.tracklist.length - 1 ? 0 : nextIndex]
       currentTrack = nextTrack
+      setupTitleAndLink()
       if (playing) {
         stopTrack()
         playTrack()
@@ -318,6 +332,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       const previousIndex = currentIndex - 1
       const previousTrack = currentRelease.tracklist[previousIndex < 0 ? currentRelease.tracklist.length - 1 : previousIndex]
       currentTrack = previousTrack
+      setupTitleAndLink()
       if (playing) {
         stopTrack()
         playTrack()
@@ -394,4 +409,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       }
     })
   }
+
+  // Update the title and link
+  setupTitleAndLink()
 })
