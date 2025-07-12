@@ -8,7 +8,10 @@ html, body {
 }
 
 #map {
-  height: calc(100vh - 56px);
+  height: calc(100vh - 54px);
+  @media (max-width: 576px) {
+    height: calc(100vh - 180px);
+  }
   width: 100vw;
   margin: 0;
 }
