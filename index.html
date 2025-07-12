@@ -50,31 +50,36 @@
           </button>
         </div>
       </div>
+      
       <nav class="navbar fixed-bottom navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-          <div class="d-flex">
-            <button id="prev-button" class="btn btn-outline-secondary">
-              <i class="bi bi-skip-start-fill"></i>
-            </button>
-            <button id="play-button" class="btn btn-outline-secondary">
-              <i class="bi bi-play-fill"></i>
-            </button>
-            <button id="next-button" class="btn btn-outline-secondary">
-              <i class="bi bi-skip-end-fill"></i>
-            </button>
-          </div>
-          <div class="d-flex">
-            <div id="sound-status" class="bg-dark text-light marquee-container">
-              <p class="marquee-text"><i class="bi bi-music-note-beamed"></i> <span id="current-track"></span></p>
+          <div class="row w-100">
+            <div class="col-2 d-flex align-items-center">
+              <button id="prev-button" class="btn btn-outline-secondary me-1">
+                <i class="bi bi-skip-start-fill"></i>
+              </button>
+              <button id="play-button" class="btn btn-outline-secondary me-1">
+                <i class="bi bi-play-fill"></i>
+              </button>
+              <button id="next-button" class="btn btn-outline-secondary">
+                <i class="bi bi-skip-end-fill"></i>
+              </button>
             </div>
-          </div>
-          <div class="d-flex">
-            <div id="release-list">
-              <select id="release-select" class="form-select">
+            <div class="col-3 d-flex align-items-center">
+              <div id="sound-status" class="bg-dark text-light w-100 marquee-container">
+                <p class="marquee-text mb-0"><i class="bi bi-music-note-beamed"></i> <span id="current-track"></span></p>
+              </div>
+            </div>
+            <div class="col-5 d-flex align-items-center">
+              <div id="release-list">
+              <select id="release-select" class="form-select w-100">
                 <option value="">Select a release</option>
               </select>
+              </div>
             </div>
-            <a id="current-link" target="_blank" class="btn btn-outline-secondary">Go To Release</a>
+            <div class="col-2 d-flex align-items-center justify-content-end">
+              <a id="current-link" target="_blank" class="btn btn-outline-secondary">Go To Release</a>
+            </div>
           </div>
         </div>
       </nav>
