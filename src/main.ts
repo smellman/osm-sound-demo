@@ -58,6 +58,8 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   let musicBuffer: AudioBuffer | null = null
   const bins = 16
   const analyser = context.createAnalyser()
+  const gainNode = context.createGain()
+  gainNode.gain.value = 1.0 // default volume
   analyser.minDecibels = -90
   analyser.maxDecibels = -10
   analyser.smoothingTimeConstant = 0.05
@@ -94,8 +96,9 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     audio = new Audio(url)
     audio.crossOrigin = 'anonymous'
     const source = context.createMediaElementSource(audio);
-    source.connect(analyser);
-    source.connect(context.destination);
+    source.connect(gainNode);
+    gainNode.connect(analyser);
+    gainNode.connect(context.destination);
     audio.play().then(() => {
       loaded = true;
       musicBuffer = context.createBuffer(1, 1, 22050); // Dummy buffer to avoid null checks later
@@ -333,6 +336,36 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     previousButton.addEventListener('click', () => {
       console.log('Previous button clicked');
       playPrevious()
+    })
+  }
+
+  const volumeButton = document.getElementById('volume-button') as HTMLButtonElement
+  if (volumeButton) {
+    volumeButton.addEventListener('click', () => {
+      const existing = document.getElementById('volume-control')
+      if (existing) {
+        existing.remove()
+        return
+      }
+      const popup = document.createElement('div')
+      popup.id = 'volume-control'
+      popup.className = 'volume-control-popup'
+
+      const range = document.createElement('input')
+      range.type = 'range'
+      range.min = '0'
+      range.max = '1'
+      range.step = '0.01'
+      range.value = gainNode.gain.value.toString()
+      range.addEventListener('input', () => {
+        gainNode.gain.value = parseFloat(range.value)
+      })
+      popup.appendChild(range)
+      document.body.appendChild(popup)
+
+      const rect = volumeButton.getBoundingClientRect()
+      popup.style.left = `${rect.right}px`
+      popup.style.top = `${rect.top - 120 - 10}px`
     })
   }
 

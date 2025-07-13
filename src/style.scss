@@ -37,3 +37,24 @@ html, body {
     transform: translateX(-100%);
   }
 }
+
+.volume-control-popup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000;
+  position: absolute;
+  width: 10px;
+  height: 120px;
+  max-width: 10px;
+  max-height: 120px;
+  input[type="range"] {
+    transform: rotate(-90deg);
+    width: 100px;
+  }
+}
