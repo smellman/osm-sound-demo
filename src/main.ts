@@ -22,8 +22,8 @@ let currentMD5 = ""
 
 const styleUrl = "https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json"
 
-let style;
-fetch(styleUrl).then(res=> res.json()).then(json => {
+let style: any = null
+fetch(styleUrl).then(res=> res.json()).then(async json => {
   style = json
   style['sky'] = {
     "sky-color": "#199EF3",
@@ -54,7 +54,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     maxPitch: 85,
   })
 
-  const context = new window.AudioContext()
+  const context = new AudioContext()
   let musicBuffer: AudioBuffer | null = null
   const bins = 16
   const analyser = context.createAnalyser()
@@ -68,6 +68,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   let loaded = false
   let playing = false
   let flyTo = false
+  let vjMode = false
 
   const playSilence = () => {
     const buf = context.createBuffer(1, 1, 22050)
@@ -88,6 +89,28 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
 
   let audio: HTMLAudioElement | null = null
 
+  const turnOnVJMode = async () => {
+    vjMode = true
+    if (audio) {
+      audio.pause()
+      audio = null
+    }
+    if (bufferSource) {
+      bufferSource.stop()
+      bufferSource = null
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    const streamSource = context.createMediaStreamSource(stream)
+    streamSource.connect(gainNode)
+    gainNode.connect(analyser)
+    gainNode.gain.value = 1.0 // Set a default volume for VJ mode
+    loaded = true
+    musicBuffer = context.createBuffer(1, 1, 22050)
+    playing = true
+    play(musicBuffer)
+    requestId = requestAnimationFrame(draw)
+  }
+
   const loadSound = (url: string) => {
     // play silent
     playSilence()
@@ -95,66 +118,66 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
     // Streaming audio
     audio = new Audio(url)
     audio.crossOrigin = 'anonymous'
-    const source = context.createMediaElementSource(audio);
-    source.connect(gainNode);
-    gainNode.connect(analyser);
-    gainNode.connect(context.destination);
+    const source = context.createMediaElementSource(audio)
+    source.connect(gainNode)
+    gainNode.connect(analyser)
+    gainNode.connect(context.destination)
     audio.play().then(() => {
-      loaded = true;
-      musicBuffer = context.createBuffer(1, 1, 22050); // Dummy buffer to avoid null checks later
+      loaded = true
+      musicBuffer = context.createBuffer(1, 1, 22050) // Dummy buffer to avoid null checks later
       if (playing) {
-        play(musicBuffer);
+        play(musicBuffer)
       }
     }).catch(error => {
-      console.error('Error playing audio:', error);
-    });
+      console.error('Error playing audio:', error)
+    })
     audio.addEventListener('ended', () => {
-      console.log('Audio ended, playing next track');
-      playNext();
-    }, false);
+      console.log('Audio ended, playing next track')
+      playNext()
+    }, false)
   }
   let dataArray: Uint8Array | null = null
 
   const changeRelease = (id: string) => {
-    console.log('Changing release to:', id);
+    console.log('Changing release to:', id)
     if (currentRelease !== null && currentRelease.id === id) {
-      return; // No change if the same release is selected
+      return // No change if the same release is selected
     }
     fetchReleaseById(id).then(release => {
       if (release) {
-        console.log('Fetched release:', release);
+        console.log('Fetched release:', release)
         if (currentRelease == null || currentRelease.id !== release.id) {
-          currentRelease = release;
-          currentTrack = release.tracklist[0] || null;
-          stopTrack(); // Stop any currently playing track
-          setupTitleAndLink();
+          currentRelease = release
+          currentTrack = release.tracklist[0] || null
+          stopTrack() // Stop any currently playing track
+          setupTitleAndLink()
         }
       } else {
-        console.error('Release not found:', id);
+        console.error('Release not found:', id)
       }
     }).catch(error => {
-      console.error('Error fetching release:', error);
-    });
+      console.error('Error fetching release:', error)
+    })
   }
 
-  const releaseList = document.getElementById('release-list') as HTMLDivElement;
-  const select = releaseList.querySelector('select') as HTMLSelectElement;
+  const releaseList = document.getElementById('release-list') as HTMLDivElement
+  const select = releaseList.querySelector('select') as HTMLSelectElement
   select.addEventListener('change', (event) => {
-    const selectedId = (event.target as HTMLSelectElement).value;
+    const selectedId = (event.target as HTMLSelectElement).value
     if (selectedId) {
-      changeRelease(selectedId);
+      changeRelease(selectedId)
     }
-  });
+  })
   map.on('load', () => {
     // fetch Otherman Records releases
     fetchAllReleases().then(releases => {
       releases.forEach((release: ListItem) => {
-        const option = document.createElement('option');
-        option.value = release.id;
-        option.textContent = `[${release.id}] ${release.title} / ${release.artist1} ${release.artist2 ? release.artist2 : ""}`;
-        select.appendChild(option);
-      });
-    });
+        const option = document.createElement('option')
+        option.value = release.id
+        option.textContent = `[${release.id}] ${release.title} / ${release.artist1} ${release.artist2 ? release.artist2 : ""}`
+        select.appendChild(option)
+      })
+    })
 
     const maxHeight = 200
     const binWidth = maxHeight / bins
@@ -222,13 +245,13 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   const link = document.getElementById('current-link') as HTMLAnchorElement
   if (playButton) {
     playButton.addEventListener('click', () => {
-      console.log('Play button clicked, playing:', playing);
+      console.log('Play button clicked, playing:', playing)
       if (!playing) {
         playTrack()
       } else {
         stopTrack()
       }
-    }, false);
+    }, false)
   }
 
   const setupProxyUrl = (url: string) => {
@@ -272,7 +295,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
       playButton.innerHTML = '<i class="bi bi-stop-fill"></i>'
       playing = true
     } else {
-      console.log('Play button clicked, stopping:', currentTrack);
+      console.log('Play button clicked, stopping:', currentTrack)
     }
   }
 
@@ -326,7 +349,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   const nextButton = document.getElementById('next-button') as HTMLButtonElement
   if (nextButton) {
     nextButton.addEventListener('click', () => {
-      console.log('Next button clicked');
+      console.log('Next button clicked')
       playNext()
     })
   }
@@ -334,7 +357,7 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
   const previousButton = document.getElementById('prev-button') as HTMLButtonElement
   if (previousButton) {
     previousButton.addEventListener('click', () => {
-      console.log('Previous button clicked');
+      console.log('Previous button clicked')
       playPrevious()
     })
   }
@@ -415,12 +438,49 @@ fetch(styleUrl).then(res=> res.json()).then(json => {
             flyTo = false
           })
         }, (error) => {
-          console.error('Error getting location:', error);
-        });
+          console.error('Error getting location:', error)
+        })
       } else {
-        console.error('Geolocation is not supported by this browser.');
+        console.error('Geolocation is not supported by this browser.')
       }
     })
+  }
+
+  const vjModeButton = document.getElementById('turn-on-vj-mode') as HTMLAnchorElement
+  if (vjModeButton) {
+    vjModeButton.addEventListener('click', async (event) => {
+      event.preventDefault()
+      if (vjMode) {
+        console.log('VJ Mode is already on')
+        return
+      }
+      try {
+        await turnOnVJMode()
+        hideAllButtonNavbarAndAttribution()
+        adjustMapForNavbar()
+        map.removeControl
+      } catch (error) {
+        console.error('Error turning on VJ Mode:', error)
+      }
+    })
+    if (navigator.mediaDevices.getUserMedia === undefined) {
+      vjModeButton.style.display = 'none' // Hide button if getUserMedia is not supported
+    }
+  }
+
+  const hideAllButtonNavbarAndAttribution = () => {
+    const navbar = document.querySelector('.navbar') as HTMLDivElement
+    if (navbar) {
+      navbar.style.display = 'none'
+    }
+    const buttons = document.querySelectorAll('.btn')
+    buttons.forEach(button => {
+      (button as HTMLButtonElement).style.display = 'none'
+    })
+    const attr = document.querySelector('.maplibregl-ctrl-attrib') as HTMLDivElement
+    if (attr) {
+      attr.style.display = 'none'
+    }
   }
 
   // Update the title and link
