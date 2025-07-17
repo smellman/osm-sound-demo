@@ -31,6 +31,8 @@ pactl load-module module-remap-source master=VitualSink.monitor source_name=Virt
 
 To check connection, please use Helvum.
 
+![Helvum screenshot](https://i.gyazo.com/3e7d026299a4966a1c306ce6a911385f.png)
+
 ## For macOS
 
 You need to install [https://rogueamoeba.com/loopback/](Loopback.app) and [https://github.com/ExistentialAudio/BlackHole](BlackHole).
