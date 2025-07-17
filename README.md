@@ -26,7 +26,7 @@ CC BY-NC 2.1 JP
 Test on Ubuntu Studio 25.04 + PipeWire.
 
 ```bash
-pactl load-module module-remap-source master=VitualSink.monitor source_name=VirtualMic source_properties=device.description=VirtualMIc
+pactl load-module module-remap-source master=VirtualSink.monitor source_name=VirtualMic source_properties=device.description=VirtualMic
 ```
 
 To check connection, please use Helvum.
@@ -35,4 +35,6 @@ To check connection, please use Helvum.
 
 ## For macOS
 
-You need to install [https://rogueamoeba.com/loopback/](Loopback.app) and [https://github.com/ExistentialAudio/BlackHole](BlackHole).
+You need to install [https://rogueamoeba.com/loopback/](Loopback.app).
+
+![Loopback screenshot](https://i.gyazo.com/051fe278806212ef0061b2d18acd7359.png)
