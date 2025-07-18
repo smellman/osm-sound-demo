@@ -1,6 +1,7 @@
 import './style.scss'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { Map } from 'maplibre-gl'
+import { addProtocol, Map } from 'maplibre-gl'
+import { Protocol } from 'pmtiles'
 import {
   ListItem,
   Release,
@@ -21,10 +22,18 @@ let currentLink = ""
 let currentMD5 = ""
 
 const styleUrl = "https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json"
+const pmtilesUrl = "https://tile.openstreetmap.jp/static/planet.pmtiles"
+let pmtilesProtocol = new Protocol()
+addProtocol('pmtiles', pmtilesProtocol.tile)
 
 let style: any = null
 fetch(styleUrl).then(res=> res.json()).then(async json => {
   style = json
+  style['sources']['openmaptiles'] = {
+    type: "vector",
+    url: "pmtiles://" + pmtilesUrl,
+    attribution: 'Protomaps © <a href="https://openstreetmap.org">OpenStreetMap</a>',
+  }
   style['sky'] = {
     "sky-color": "#199EF3",
     "sky-horizon-blend": 0.5,
