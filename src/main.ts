@@ -52,6 +52,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
     zoom: 16,
     pitch: 70,
     maxPitch: 85,
+    hash: true,
   })
 
   const context = new AudioContext()
