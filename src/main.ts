@@ -32,7 +32,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
   style['sources']['openmaptiles'] = {
     type: "vector",
     url: "pmtiles://" + pmtilesUrl,
-    attribution: 'Protomaps © <a href="https://openstreetmap.org">OpenStreetMap</a>',
+    attribution: '<a href="https://openmaptiles.org/" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>',
   }
   style['sky'] = {
     "sky-color": "#199EF3",
@@ -466,7 +466,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
       }
       try {
         await turnOnVJMode()
-        hideAllButtonNavbarAndAttribution()
+        hideAllButtonNavbar()
         adjustMapForNavbar()
         map.removeControl
       } catch (error) {
@@ -478,7 +478,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
     }
   }
 
-  const hideAllButtonNavbarAndAttribution = () => {
+  const hideAllButtonNavbar = () => {
     const navbar = document.querySelector('.navbar') as HTMLDivElement
     if (navbar) {
       navbar.style.display = 'none'
@@ -487,10 +487,6 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
     buttons.forEach(button => {
       (button as HTMLButtonElement).style.display = 'none'
     })
-    const attr = document.querySelector('.maplibregl-ctrl-attrib') as HTMLDivElement
-    if (attr) {
-      attr.style.display = 'none'
-    }
   }
 
   // Update the title and link
