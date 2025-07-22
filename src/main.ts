@@ -79,9 +79,11 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
   let playing = false
   let flyTo = false
   let vjMode = false
+  const numberOfChannels = 2
+  const sampleRate = 44100
 
   const playSilence = () => {
-    const buf = context.createBuffer(1, 1, 22050)
+    const buf = context.createBuffer(numberOfChannels, 1, sampleRate)
     const src = context.createBufferSource()
     src.buffer = buf
     src.connect(context.destination)
@@ -115,7 +117,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
     gainNode.connect(analyser)
     gainNode.gain.value = 1.0 // Set a default volume for VJ mode
     loaded = true
-    musicBuffer = context.createBuffer(1, 1, 22050)
+    musicBuffer = context.createBuffer(numberOfChannels, 1, sampleRate)
     playing = true
     play(musicBuffer)
     requestId = requestAnimationFrame(draw)
@@ -134,7 +136,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
     gainNode.connect(context.destination)
     audio.play().then(() => {
       loaded = true
-      musicBuffer = context.createBuffer(1, 1, 22050) // Dummy buffer to avoid null checks later
+      musicBuffer = context.createBuffer(numberOfChannels, 1, sampleRate)
       if (playing) {
         play(musicBuffer)
       }
