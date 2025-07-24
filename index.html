@@ -19,12 +19,12 @@
               </div>
               <div class="modal-body">
                 <p>This demo showcases the integration of <a href="https://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> with sound playback functionality.</p>
-                <p>All music by <a href="https://www.otherman-records.com/" target="_blank">Otherman Records</a></p>
+                <p style="display: none;">All music by <a href="https://www.otherman-records.com/" target="_blank">Otherman Records</a></p>
                 <p>Original sound example developed by <a href="https://docs.mapbox.com/mapbox-gl-js/example/dancing-buildings/" target="_blank">Mapbox</a></p>
                 <p>Source code available at <a href="https://github.com/smellman/osm-sound-demo" target="_blank">GitHub</a></p>
                 <p>Developed by <a href="https://github.com/smellman" target="_blank">Taro Matsuzawa (smellman)</a></p>
                 <p style="text-align: center;"><img src="./qr.png" alt="QR Code" /></p>
-                <p class="text-warning">VJ mode is experimental and supports Firefox and Chrome now.</p>
+                <p class="text-warning">VJ mode is experimental and supports Desktop browsers now.</p>
                 <ul>
                   <li>macOS: Supports <a href="https://rogueamoeba.com/loopback/" target="_blank">Loopback.app</a></li>
                   <li>Linux: Supports Helvum + PipeWire</li>
@@ -59,7 +59,7 @@
       <nav class="navbar fixed-bottom navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
           <div class="row w-100 g-2">
-            <div class="col-12 col-md-2 d-flex align-items-center">
+            <div style="display: none !important;" class="col-12 col-md-2 d-flex align-items-center">
               <button id="prev-button" class="btn btn-outline-secondary me-1">
                 <i class="bi bi-skip-start-fill"></i>
               </button>
@@ -73,12 +73,12 @@
                 <i class="bi bi-volume-up-fill"></i>
               </button>
             </div>
-            <div class="col-12 col-md-3 d-flex align-items-center">
+            <div style="display: none !important;" class="col-12 col-md-3 d-flex align-items-center">
               <div id="sound-status" class="bg-dark text-light w-100 marquee-container">
                 <p class="marquee-text mb-0"><i class="bi bi-music-note-beamed"></i> <span id="current-track"></span></p>
               </div>
             </div>
-            <div class="col-12 col-md-5 d-flex align-items-center">
+            <div style="display: none !important;" class="col-12 col-md-5 d-flex align-items-center">
               <div id="release-list" class="w-100">
                 <select id="release-select" class="form-select w-100">
                   <option value="">Select a release</option>
@@ -86,7 +86,7 @@
               </div>
             </div>
             <div class="col-12 col-md-2 d-flex align-items-center justify-content-md-end justify-content-start">
-              <a id="current-link" target="_blank" class="btn btn-outline-secondary w-100 w-md-auto">Go To Release</a>
+              <a id="current-link" target="_blank" style="display: none;" class="btn btn-outline-secondary w-100 w-md-auto">Go To Release</a>
               <a id="turn-on-vj-mode" class="btn btn-outline-secondary w-100 w-md-auto">Turn On VJ Mode</a>
             </div>
           </div>
