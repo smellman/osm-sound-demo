@@ -121,7 +121,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
     playing = true
     play(musicBuffer)
     requestId = requestAnimationFrame(draw)
-    setTimeout(() => {
+    setInterval(() => {
       if (!flyTo) {
         jumpToRandomLocation()
       }
