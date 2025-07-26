@@ -121,6 +121,11 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
     playing = true
     play(musicBuffer)
     requestId = requestAnimationFrame(draw)
+    setTimeout(() => {
+      if (!flyTo) {
+        jumpToRandomLocation()
+      }
+    }, 60000) // Jump to a random location after 60 seconds
   }
 
   const loadSound = (url: string) => {
@@ -427,6 +432,29 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
       })
     })
   })
+
+  const jumpToRandomLocation = () => {
+    const randomLink = flyToLinks[Math.floor(Math.random() * flyToLinks.length)]
+    const longitude = parseFloat(randomLink.getAttribute('data-longitude') || '0')
+    const latitude = parseFloat(randomLink.getAttribute('data-latitude') || '0')
+    map.flyTo({
+      center: [longitude, latitude],
+      zoom: 16,
+      pitch: 70,
+      bearing: 0,
+      speed: 1.2,
+      curve: 1.42,
+      easing(t) {
+        return t
+      },
+      essential: true // this animation is considered essential with respect to prefers-reduced-motion
+    })
+    flyTo = true
+    map.once('moveend', () => {
+      flyTo = false
+    })
+  }
+
   const locateButton = document.getElementById('locate-button') as HTMLButtonElement
   if (locateButton) {
     locateButton.addEventListener('click', () => {
