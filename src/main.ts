@@ -153,7 +153,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
       playNext()
     }, false)
   }
-  let dataArray: Uint8Array | null = null
+  let dataArray: Uint8Array<ArrayBuffer> | null = null
 
   const changeRelease = (id: string) => {
     console.log('Changing release to:', id)
@@ -218,7 +218,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
         }
       })
     }
-    dataArray = new Uint8Array(bins)
+    dataArray = new Uint8Array(bins) as Uint8Array<ArrayBuffer>
   })
 
   let requestId: number | null = null
@@ -231,7 +231,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
     if (!dataArray) {
       return
     }
-    analyser.getByteFrequencyData(dataArray)
+    analyser.getByteFrequencyData(dataArray!)
     let avg = 0
     for (let i = 0; i < bins; i++) {
       avg += dataArray[i]
