@@ -16,10 +16,10 @@ const proxyURL = "https://proxy.smellman.org/proxy/"
 
 let currentRelease: Release | null = null
 let currentTrack: Track | null = null
+let currentTrackIndex = 0
 let currentUrl = ""
 let currentTitle = ""
 let currentLink = ""
-let currentMD5 = ""
 
 const styleUrl = "https://tile.openstreetmap.jp/styles/maptiler-toner-ja/style.json"
 const pmtilesUrl = "https://tile.openstreetmap.jp/static/planet.pmtiles"
@@ -165,6 +165,7 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
         console.log('Fetched release:', release)
         if (currentRelease == null || currentRelease.id !== release.id) {
           currentRelease = release
+          currentTrackIndex = 0
           currentTrack = release.tracklist[0] || null
           stopTrack() // Stop any currently playing track
           setupTitleAndLink()
@@ -283,14 +284,12 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
     if (currentTrack) {
       currentTitle = `${currentTrack.title} / ${currentRelease?.artist1} ${currentRelease?.artist2 ? currentRelease.artist2 : ""}`
       currentLink = linkBase + currentRelease!.id
-      currentMD5 = currentTrack.md5 || ""
       title.textContent = currentTitle
       link.href = currentLink
       link.target = "_blank"
     } else {
       currentTitle = "No track selected, please select a release."
       currentLink = "#"
-      currentMD5 = ""
       title.textContent = currentTitle
       link.href = currentLink
       link.target = ""
@@ -337,10 +336,8 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
 
   const playNext = () => {
     if (currentRelease) {
-      const currentIndex = currentRelease.tracklist.findIndex(t => t.md5 === currentMD5)
-      const nextIndex = currentIndex + 1
-      const nextTrack = currentRelease.tracklist[nextIndex > currentRelease.tracklist.length - 1 ? 0 : nextIndex]
-      currentTrack = nextTrack
+      currentTrackIndex = (currentTrackIndex + 1) % currentRelease.tracklist.length
+      currentTrack = currentRelease.tracklist[currentTrackIndex]
       setupTitleAndLink()
       if (playing) {
         stopTrack()
@@ -351,10 +348,8 @@ fetch(styleUrl).then(res=> res.json()).then(async json => {
 
   const playPrevious = () => {
     if (currentRelease) {
-      const currentIndex = currentRelease.tracklist.findIndex(t => t.md5 === currentMD5)
-      const previousIndex = currentIndex - 1
-      const previousTrack = currentRelease.tracklist[previousIndex < 0 ? currentRelease.tracklist.length - 1 : previousIndex]
-      currentTrack = previousTrack
+      currentTrackIndex = (currentTrackIndex - 1 + currentRelease.tracklist.length) % currentRelease.tracklist.length
+      currentTrack = currentRelease.tracklist[currentTrackIndex]
       setupTitleAndLink()
       if (playing) {
         stopTrack()
