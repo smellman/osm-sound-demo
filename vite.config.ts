@@ -8,6 +8,7 @@ export default defineConfig({
           'import',
           'color-functions',
           'global-builtin',
+          'if-function',
         ],
       },
     },

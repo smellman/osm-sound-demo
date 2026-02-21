@@ -12,12 +12,12 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
-    "maplibre-gl": "5.7.3",
-    "pmtiles": "^4.3.0"
+    "maplibre-gl": "5.18.0",
+    "pmtiles": "^4.4.0"
   },
   "devDependencies": {
-    "sass": "^1.93.0",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.7"
+    "sass": "^1.97.3",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
   }
 }
