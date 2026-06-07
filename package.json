@@ -16,8 +16,8 @@
     "pmtiles": "^4.4.1"
   },
   "devDependencies": {
-    "sass": "^1.99.0",
+    "sass": "^1.100.0",
     "typescript": "^6.0.3",
-    "vite": "^8.0.11"
+    "vite": "^8.0.16"
   }
 }
