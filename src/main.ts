@@ -1,6 +1,11 @@
 import './style.scss'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { addProtocol, Map } from 'maplibre-gl'
+import {
+  addProtocol,
+  Map,
+  setWorkerUrl,
+} from 'maplibre-gl'
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { Protocol } from 'pmtiles'
 import {
   ListItem,
@@ -10,6 +15,8 @@ import {
   fetchReleaseById,
 } from './otherman-records'
 import 'bootstrap'
+
+setWorkerUrl(workerUrl)
 
 const linkBase = "https://www.otherman-records.com/releases/"
 const proxyURL = "https://proxy.smellman.org/proxy/"
